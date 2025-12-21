@@ -1,63 +1,72 @@
-import Image from "next/image";
+"use client";
+
+import { useJourney } from "user-journey-tracker";
+import Navigation from "./components/Navigation";
 
 export default function Home() {
+  const { trackAction } = useJourney();
+
+  const handleButtonClick = (action: string) => {
+    trackAction(action);
+    alert(`Action tracked: ${action}`);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
+      <Navigation />
+      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="rounded-lg bg-white p-8 shadow-lg dark:bg-gray-900">
+          <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
+            Welcome to Journey Tracker Demo
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mb-8 text-lg text-gray-600 dark:text-gray-400">
+            This is the home page. Navigate between pages and click buttons to test the journey tracking functionality.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+          <div className="mb-8 space-y-4">
+            <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">
+              Test Action Tracking
+            </h2>
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={() => handleButtonClick("Button: Get Started Clicked")}
+                className="rounded-md bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
+              >
+                Get Started
+              </button>
+              <button
+                onClick={() => handleButtonClick("Button: Learn More Clicked")}
+                className="rounded-md bg-green-600 px-6 py-3 text-white transition-colors hover:bg-green-700"
+              >
+                Learn More
+              </button>
+              <button
+                onClick={() => handleButtonClick("Button: Sign Up Clicked")}
+                className="rounded-md bg-purple-600 px-6 py-3 text-white transition-colors hover:bg-purple-700"
+              >
+                Sign Up
+              </button>
+              <button
+                onClick={() => handleButtonClick("Button: View Features Clicked")}
+                className="rounded-md bg-orange-600 px-6 py-3 text-white transition-colors hover:bg-orange-700"
+              >
+                View Features
+              </button>
+            </div>
+          </div>
+
+          <div className="rounded-md bg-gray-100 p-4 dark:bg-gray-800">
+            <h3 className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
+              Testing Instructions:
+            </h3>
+            <ul className="list-inside list-disc space-y-1 text-gray-600 dark:text-gray-400">
+              <li>Click the buttons above to track actions</li>
+              <li>Navigate to different pages using the navigation bar</li>
+              <li>Visit the "View Journey" page to see all tracked data</li>
+              <li>Try refreshing the page - data should persist (persist=true)</li>
+              <li>Try opening a new tab - should start a new session</li>
+            </ul>
+          </div>
         </div>
       </main>
     </div>
