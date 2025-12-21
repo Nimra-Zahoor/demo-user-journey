@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useJourney } from "user-journey-tracker";
+import { useJourney } from "user-journey-analytics";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 

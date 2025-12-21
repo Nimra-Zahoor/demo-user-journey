@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useJourney } from "user-journey-tracker";
+import { useJourney } from "user-journey-analytics";
 import Navigation from "../components/Navigation";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";

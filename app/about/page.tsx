@@ -1,6 +1,6 @@
 "use client";
 
-import { useJourney } from "user-journey-tracker";
+import { useJourney } from "user-journey-analytics";
 import Navigation from "../components/Navigation";
 
 export default function About() {
@@ -28,7 +28,7 @@ export default function About() {
               About Our Company
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
-              We are a demo company showcasing the user-journey-tracker package. 
+              We are a demo company showcasing the user-journey-analytics package. 
               This package helps you track user journeys in your Next.js applications 
               without any backend or external services.
             </p>

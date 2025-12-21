@@ -2,7 +2,7 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { JourneyProvider } from "user-journey-tracker";
+import { JourneyProvider } from "user-journey-analytics";
 import ExportButton from "./components/ExportButton";
 
 const geistSans = Geist({
