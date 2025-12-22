@@ -1,10 +1,10 @@
 # Demo User Journey Tracker
 
-This is a **Next.js demo application** showcasing the `user-journey-tracker` npm package. This demo demonstrates how to integrate and use the journey tracking functionality in a real Next.js application.
+This is a **Next.js demo application** showcasing the [`user-journey-analytics`](https://www.npmjs.com/package/user-journey-analytics) npm package. This demo demonstrates how to integrate and use the journey tracking functionality in a real Next.js application.
 
 ## 📦 About
 
-This demo app tests all features of the `user-journey-tracker` package:
+This demo app tests all features of the `user-journey-analytics` package:
 - ✅ Automatic page tracking
 - ✅ Manual action tracking
 - ✅ Time spent per page
@@ -21,30 +21,28 @@ This demo app tests all features of the `user-journey-tracker` package:
 
 ### Installation
 
-1. **Install dependencies:**
+1. **Install dependencies (including the published package):**
    ```bash
    npm install
    ```
+   
+   This will automatically install `user-journey-analytics` from npm along with all other dependencies.
 
-2. **Install the local package:**
+2. **Start the development server:**
    ```bash
-   npm install ../customer-journey-tracker
+   npm run dev
    ```
 
-3. **Build the package (if needed):**
-   ```bash
-   cd ../customer-journey-tracker
-   npm run build
-   cd ../demo-user-journey
-   ```
-
-4. **Start the development server:**
-```bash
-npm run dev
-   ```
-
-5. **Open your browser:**
+3. **Open your browser:**
    Navigate to [http://localhost:3000](http://localhost:3000)
+
+### Installing the Package in Your Own Project
+
+To use `user-journey-analytics` in your own Next.js project:
+
+```bash
+npm i user-journey-analytics
+```
 
 ## 🛠️ Implementation Guide
 
@@ -59,7 +57,7 @@ Since `JourneyProvider` uses React hooks and browser APIs, your layout **must** 
 ```tsx
 "use client";  // ← Required!
 
-import { JourneyProvider } from "user-journey-tracker";
+import { JourneyProvider } from "user-journey-analytics";
 
 export default function RootLayout({ children }) {
   return (
@@ -87,7 +85,7 @@ export default function RootLayout({ children }) {
 | `devOnly` | `boolean` | `false` | If `true`, tracking only works when `NODE_ENV === "development"`. Automatically disables in production builds. |
 | `persist` | `boolean` | `false` | If `true`, saves journey data to `localStorage`. Data survives page refreshes and browser restarts. |
 | `session` | `boolean` | `false` | If `true`, uses `sessionStorage` for one journey per browser tab/window. Data clears when tab is closed. |
-| `storageKey` | `string` | `"user-journey-tracker"` | Custom key for localStorage/sessionStorage. Use this if you need multiple separate trackers. |
+| `storageKey` | `string` | `"user-journey-analytics"` | Custom key for localStorage/sessionStorage. Use this if you need multiple separate trackers. |
 
 #### Prop Combinations
 
@@ -161,7 +159,7 @@ The `useJourney()` hook provides three functions for tracking and managing journ
 ```tsx
 "use client";  // ← Required for client components
 
-import { useJourney } from "user-journey-tracker";
+import { useJourney } from "user-journey-analytics";
 
 export default function MyComponent() {
   const { trackAction, exportJourney, clearJourney } = useJourney();
@@ -442,9 +440,9 @@ See [TESTING_GUIDE.md](./TESTING_GUIDE.md) for comprehensive testing instruction
 ```tsx
 "use client";  // ← Always required
 
-import { JourneyProvider } from "user-journey-tracker";
+import { JourneyProvider } from "user-journey-analytics";
 // or
-import { useJourney } from "user-journey-tracker";
+import { useJourney } from "user-journey-analytics";
 ```
 
 ### 2. Provider Placement
@@ -454,7 +452,7 @@ The `JourneyProvider` should wrap your entire app, typically in the root layout:
 ```tsx
 // app/layout.tsx
 "use client";
-import { JourneyProvider } from "user-journey-tracker";
+import { JourneyProvider } from "user-journey-analytics";
 
 export default function RootLayout({ children }) {
   return (
@@ -476,7 +474,7 @@ Use `useJourney()` in any client component that needs to track actions or access
 ```tsx
 // Any component file
 "use client";
-import { useJourney } from "user-journey-tracker";
+import { useJourney } from "user-journey-analytics";
 
 export default function MyComponent() {
   const { trackAction, exportJourney, clearJourney } = useJourney();
@@ -489,16 +487,15 @@ export default function MyComponent() {
 - Use descriptive action names: `"Button: Get Started Clicked"` instead of `"click"`
 - Include context: `"Contact: Form Submitted"` instead of `"submit"`
 - Group by feature: `"Products: Add to Cart - Product A"`
-
 ## 📚 Learn More
 
-- **Package Documentation:** See `../customer-journey-tracker/README.md`
+- **Package on npm:** [user-journey-analytics](https://www.npmjs.com/package/user-journey-analytics)
 - **Testing Guide:** See [TESTING_GUIDE.md](./TESTING_GUIDE.md)
 - **Next.js Documentation:** [https://nextjs.org/docs](https://nextjs.org/docs)
 
 ## 🤝 Contributing
 
-This is a demo application. For issues or contributions related to the `user-journey-tracker` package itself, please refer to the main package repository.
+This is a demo application. For issues or contributions related to the `user-journey-analytics` repo itself, please refer to the [demo repository](https://github.com/Nimra-Zahoor/demo-user-journey).
 
 ## 📄 License
 
