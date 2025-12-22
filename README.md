@@ -1,4 +1,4 @@
-# Demo User Journey Tracker
+# Demo User Journey Analytics
 
 This is a **Next.js demo application** showcasing the [`user-journey-analytics`](https://www.npmjs.com/package/user-journey-analytics) npm package. This demo demonstrates how to integrate and use the journey tracking functionality in a real Next.js application.
 
@@ -8,6 +8,8 @@ This demo app tests all features of the `user-journey-analytics` package:
 - ✅ Automatic page tracking
 - ✅ Manual action tracking
 - ✅ Time spent per page
+- ✅ **Backend API integration** with SQLite database
+- ✅ Event batching and automatic flushing
 - ✅ Data persistence (localStorage)
 - ✅ Session tracking (sessionStorage)
 - ✅ Export to JSON, CSV, and PDF
@@ -36,12 +38,75 @@ This demo app tests all features of the `user-journey-analytics` package:
 3. **Open your browser:**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
+4. **Database:**
+   The SQLite database will be automatically created at `data/journey.db` when the first event is sent.
+
 ### Installing the Package in Your Own Project
 
 To use `user-journey-analytics` in your own Next.js project:
 
 ```bash
 npm i user-journey-analytics
+```
+
+## 🏗️ Backend API Integration
+
+This demo includes a **production-ready backend API** that stores events in SQLite. The backend API is located at `app/api/journey/route.ts`.
+
+### How It Works
+
+1. **Events are batched** in the browser (default: 10 events or 30 seconds)
+2. **Sent to backend** using `navigator.sendBeacon()` for reliable delivery
+3. **Stored in SQLite** database at `data/journey.db`
+4. **localStorage acts as buffer** - events are only cleared after successful backend confirmation
+
+### Viewing Stored Events
+
+You can query stored events via the API:
+
+```bash
+# Get all events (last 100)
+curl http://localhost:3000/api/journey
+
+# Get events for a specific session
+curl http://localhost:3000/api/journey?sessionId=session-1234567890-abc123
+
+# Limit results
+curl http://localhost:3000/api/journey?limit=50
+```
+
+### Database Schema
+
+```sql
+CREATE TABLE events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  session_id TEXT NOT NULL,
+  user_id TEXT,
+  app_name TEXT,
+  event_type TEXT NOT NULL,  -- 'page_view', 'action', 'page_exit'
+  path TEXT,
+  action TEXT,
+  timestamp INTEGER NOT NULL,
+  time_spent INTEGER,
+  metadata TEXT,  -- JSON string
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Configuration
+
+The demo is configured in `app/layout.tsx`:
+
+```tsx
+<JourneyProvider 
+  appName="Demo User Journey App"
+  devOnly={true}
+  endpoint="/api/journey"      // Backend API endpoint
+  flushInterval={30000}         // Flush every 30 seconds
+  batchSize={10}                // Flush after 10 events
+  persist={true}                // Also save to localStorage (for debugging)
+  session={true}
+/>
 ```
 
 ## 🛠️ Implementation Guide
@@ -83,8 +148,12 @@ export default function RootLayout({ children }) {
 |------|------|---------|-------------|
 | `appName` | `string` | `undefined` | Optional name for your application. Appears in exported journey data. |
 | `devOnly` | `boolean` | `false` | If `true`, tracking only works when `NODE_ENV === "development"`. Automatically disables in production builds. |
-| `persist` | `boolean` | `false` | If `true`, saves journey data to `localStorage`. Data survives page refreshes and browser restarts. |
-| `session` | `boolean` | `false` | If `true`, uses `sessionStorage` for one journey per browser tab/window. Data clears when tab is closed. |
+| `endpoint` | `string` | `undefined` | Backend API endpoint to send events to (e.g., `/api/journey`). If provided, events are batched and sent to backend. |
+| `apiKey` | `string` | `undefined` | Optional API key for backend authentication. |
+| `flushInterval` | `number` | `30000` | Time in milliseconds between automatic flushes (default: 30 seconds). |
+| `batchSize` | `number` | `10` | Number of events to buffer before auto-flushing (default: 10). |
+| `persist` | `boolean` | `false` | If `true`, saves journey data to `localStorage`. Data survives page refreshes and browser restarts. (Legacy option) |
+| `session` | `boolean` | `false` | If `true`, uses `sessionStorage` for one journey per browser tab/window. Data clears when tab is closed. (Legacy option) |
 | `storageKey` | `string` | `"user-journey-analytics"` | Custom key for localStorage/sessionStorage. Use this if you need multiple separate trackers. |
 
 #### Prop Combinations
@@ -134,19 +203,23 @@ export default function RootLayout({ children }) {
 - Data clears when tab closes
 - Each tab has separate journey
 
-**Example 4: Full Features (This Demo)**
+**Example 4: Full Features with Backend API (This Demo)**
 ```tsx
 <JourneyProvider 
   appName="Demo User Journey App"
   devOnly={true}
-  persist={true}
+  endpoint="/api/journey"      // Backend API endpoint
+  flushInterval={30000}         // Flush every 30 seconds
+  batchSize={10}                // Flush after 10 events
+  persist={true}                // Also save to localStorage (for debugging)
   session={true}
 >
   {children}
 </JourneyProvider>
 ```
 - Tracks in development only
-- Data persists across refreshes
+- Events are batched and sent to backend API
+- Data persists across refreshes (localStorage buffer)
 - Session-based (per tab)
 - **Note:** When both `persist` and `session` are enabled, `sessionStorage` takes precedence
 

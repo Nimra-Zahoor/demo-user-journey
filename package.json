@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "better-sqlite3": "^12.5.0",
     "jspdf": "^3.0.4",
     "jspdf-autotable": "^5.0.2",
     "next": "16.1.0",

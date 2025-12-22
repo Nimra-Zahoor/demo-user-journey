@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { JourneyProvider } from "user-journey-analytics";
@@ -25,15 +26,20 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <JourneyProvider 
-          appName="Demo User Journey App"
-          devOnly={true}
-          persist={true}
-          session={true}
-        >
-          {children}
-          <ExportButton />
-        </JourneyProvider>
+        <Suspense fallback={<div>Loading...</div>}>
+          <JourneyProvider 
+            appName="Demo User Journey App"
+            devOnly={true}
+            endpoint="/api/journey"
+            flushInterval={30000}
+            batchSize={10}
+            persist={true}
+            session={true}
+          >
+            {children as any}
+            <ExportButton />
+          </JourneyProvider>
+        </Suspense>
       </body>
     </html>
   );
