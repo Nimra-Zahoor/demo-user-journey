@@ -586,7 +586,7 @@ export default function MyComponent() {
 
 This demo uses the following key dependencies:
 
-- **user-journey-analytics** (^1.0.3) - The main tracking package
+- **user-journey-analytics** (^1.0.4) - The main tracking package
 - **next** (16.1.0) - Next.js framework
 - **react** (19.2.3) - React library
 - **better-sqlite3** (^12.5.0) - SQLite database for backend storage

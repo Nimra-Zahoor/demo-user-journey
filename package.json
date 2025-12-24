@@ -16,7 +16,7 @@
     "next": "16.1.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "user-journey-analytics": "^1.0.3"
+    "user-journey-analytics": "^1.0.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
