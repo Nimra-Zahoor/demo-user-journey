@@ -2,7 +2,7 @@
 
 This is a **Next.js demo application** showcasing the [`user-journey-analytics`](https://www.npmjs.com/package/user-journey-analytics) npm package. This demo demonstrates how to integrate and use the journey tracking functionality in a real Next.js application.
 
-> **Note:** Backend integration is **completely optional**. The package works perfectly fine without it — all analytics are calculated and stored in the browser. This demo includes an optional backend integration example for those who want to store events in a database.
+> **Note:** Backend integration is **completely optional**. The package works perfectly fine without it — all analytics are calculated and stored in the browser. You can optionally send data to your own backend API.
 
 ## 📦 About
 
@@ -15,10 +15,9 @@ This demo app demonstrates all features of the `user-journey-analytics` package:
 - ✅ Session tracking (sessionStorage)
 - ✅ Export to JSON, CSV, and PDF
 - ✅ Real-time journey viewer
-- ✅ **Optional** Backend API integration with SQLite database
+- ✅ **Optional** Backend API integration
 - ✅ **Optional** Event batching and automatic flushing
 - ✅ **Optional** Manual flush functionality
-- ✅ **Optional** Database events viewer
 
 ## 🚀 Getting Started
 
@@ -72,16 +71,9 @@ demo-user-journey/
 │   │   └── page.tsx             # Journey viewer with export functionality
 │   ├── features/
 │   │   └── page.tsx             # Comprehensive features demo page
-│   ├── database/                # Optional: Database events viewer
-│   │   └── page.tsx             # (Only works if backend is configured)
-│   ├── api/                      # Optional: Backend API
-│   │   └── journey/
-│   │       └── route.ts         # (Only needed for backend integration)
 │   └── components/
 │       ├── Navigation.tsx       # Navigation bar with export dropdown
 │       └── ExportButton.tsx     # Fixed floating export button
-├── data/                         # Optional: SQLite database
-│   └── journey.db               # (Auto-created if backend is enabled)
 ├── package.json
 └── README.md
 ```
@@ -121,16 +113,6 @@ demo-user-journey/
   3. Export journey data
   4. Automatic page tracking
   5. **Optional:** Manual flush to backend
-  6. **Optional:** Backend integration overview
-
-### Database Viewer (`/database`) - Optional
-- **Only works if backend integration is enabled**
-- View events stored in SQLite database
-- Filter by session ID
-- Adjustable limit
-- Real-time statistics (total events, unique sessions, page views, actions)
-- Displays event metadata
-- Auto-refreshes every 5 seconds
 
 ## 🛠️ Implementation Guide
 
@@ -447,7 +429,6 @@ See `app/journey/page.tsx`, `app/components/Navigation.tsx`, and `app/components
 - [ ] Open new tab → Separate session (if `session={true}`)
 - [ ] Visit Features page (`/features`) → See all features demonstrated
 - [ ] **Optional:** Manual Flush → Events sent to backend immediately (if backend configured)
-- [ ] **Optional:** Visit Database Viewer (`/database`) → See events stored in SQLite (if backend configured)
 
 ## 🔍 Key Implementation Points
 
@@ -525,91 +506,103 @@ This demo uses the following key dependencies:
 - **jspdf** (^3.0.4) - PDF generation
 - **jspdf-autotable** (^5.0.2) - PDF table generation
 - **tailwindcss** (^4) - Styling
-- **better-sqlite3** (^12.5.0) - **(Optional)** SQLite database for backend storage (only needed if using backend)
 
 ---
 
-## 🔌 Optional: Backend API Integration
+## 🔌 Optional: Sending Data to Your Backend
 
 > **Important:** Backend integration is **completely optional**. The package works perfectly fine without it — all analytics are calculated and stored in the browser. You can export and analyze data without any backend.
 
-This demo includes an **optional backend API** that stores events in SQLite. This is useful for production applications that want to store events in a database for long-term analysis.
-
-### When to Use Backend Integration
-
-- Production applications requiring persistent event storage
-- Multi-user analytics across sessions
-- Long-term data retention
-- Advanced analytics and reporting
-- Integration with existing data pipelines
-
-### When NOT to Use Backend Integration
-
-- Development and testing
-- Single-user applications
-- Quick prototypes and MVPs
-- Privacy-focused applications (data stays in browser)
-- Applications without backend infrastructure
+If you want to send journey events to your own backend API, you can use the `endpoint` prop and `flush()` function.
 
 ### How It Works
 
-1. **Events are batched** in the browser (default: 10 events or 30 seconds)
-2. **Sent to backend** using `navigator.sendBeacon()` for reliable delivery
-3. **Stored in SQLite** database at `data/journey.db`
-4. **localStorage acts as buffer** - events are only cleared after successful backend confirmation
+1. **Configure `endpoint`** in `JourneyProvider` - events are automatically batched and sent
+2. **Use `flush()`** function - manually trigger sending events to your backend
+3. **Events are batched** - sent in batches (default: 10 events or 30 seconds) for efficiency
+4. **Reliable delivery** - uses `navigator.sendBeacon()` for guaranteed delivery
 
 ### Setting Up Backend Integration
 
-#### 1. Configure JourneyProvider with Backend
+#### 1. Configure JourneyProvider with Backend Endpoint
 
-Add the `endpoint` prop to enable backend integration:
+Add the `endpoint` prop to enable automatic event sending:
 
 ```tsx
 <JourneyProvider 
-  appName="Demo User Journey App"
-  endpoint="/api/journey"      // Backend API endpoint (optional)
-  flushInterval={30000}         // Flush every 30 seconds (optional)
-  batchSize={10}                // Flush after 10 events (optional)
-  apiKey="your-api-key"         // Optional: API key for auth
-  persist={true}                // Also save to localStorage (for debugging)
-  session={true}
+  appName="My App"
+  endpoint="/api/journey"        // Your backend API endpoint (optional)
+  flushInterval={30000}          // Auto-flush every 30 seconds (optional)
+  batchSize={10}                 // Auto-flush after 10 events (optional)
+  apiKey="your-api-key"          // Optional: API key for authentication
 >
   {children}
 </JourneyProvider>
 ```
 
-#### 2. Create Backend API Endpoint
+#### 2. Manual Flush Using `flush()` Function
 
-The backend API is located at `app/api/journey/route.ts` in this demo.
+You can also manually trigger sending events to your backend:
 
-### API Endpoints
+```tsx
+"use client";
 
-#### POST `/api/journey`
-Stores events in the database.
+import { useJourney } from "user-journey-analytics";
 
-**Request Body:**
+export default function MyComponent() {
+  const { flush } = useJourney();
+
+  const handleSendToBackend = async () => {
+    try {
+      await flush();
+      console.log("Events sent to backend successfully!");
+    } catch (error) {
+      console.error("Failed to send events:", error);
+    }
+  };
+
+  return (
+    <button onClick={handleSendToBackend}>
+      Send Events to Backend
+    </button>
+  );
+}
+```
+
+### Backend API Requirements
+
+Your backend should accept POST requests with this structure:
+
+**Request:**
 ```json
+POST /api/journey
+Content-Type: application/json
+Authorization: Bearer your-api-key  // Optional
+
 {
   "sessionId": "session-1234567890-abc123",
-  "userId": "user-123",
-  "appName": "Demo User Journey App",
+  "userId": "optional-user-id",
+  "appName": "My App",
   "events": [
     {
       "type": "page_view",
       "path": "/about",
-      "timestamp": 1234567890,
-      "timeSpent": 5000,
-      "metadata": null
+      "timestamp": 1234567890
     },
     {
       "type": "action",
-      "action": "Button: Get Started Clicked",
       "path": "/",
+      "action": "Button: Get Started Clicked",
       "timestamp": 1234567890,
       "metadata": {
-        "buttonType": "primary",
-        "page": "/"
+        "buttonType": "primary"
       }
+    },
+    {
+      "type": "page_exit",
+      "path": "/about",
+      "timestamp": 1234567890,
+      "timeSpent": 5000
     }
   ]
 }
@@ -618,93 +611,52 @@ Stores events in the database.
 **Response:**
 ```json
 {
-  "success": true,
-  "inserted": 2
+  "success": true
 }
 ```
 
-#### GET `/api/journey`
-Query stored events from the database.
+### Event Types
 
-**Query Parameters:**
-- `sessionId` (optional): Filter by session ID
-- `limit` (optional): Limit results (default: 100)
+Events can be one of three types:
 
-**Example:**
-```bash
-# Get all events (last 100)
-curl http://localhost:3000/api/journey
+- **`page_view`** - When user navigates to a page
+- **`action`** - When user performs an action (via `trackAction()`)
+- **`page_exit`** - When user leaves a page (includes `timeSpent`)
 
-# Get events for a specific session
-curl http://localhost:3000/api/journey?sessionId=session-1234567890-abc123
+### Example Backend Implementation
 
-# Limit results
-curl http://localhost:3000/api/journey?limit=50
-```
+Here's a simple example using Next.js API route:
 
-**Response:**
-```json
-{
-  "success": true,
-  "count": 10,
-  "events": [...]
+```typescript
+// app/api/journey/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { sessionId, userId, appName, events } = body;
+
+    // Validate API key (optional)
+    const apiKey = request.headers.get('authorization')?.replace('Bearer ', '');
+    if (process.env.API_KEY && apiKey !== process.env.API_KEY) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Store events in your database (PostgreSQL, MongoDB, etc.)
+    // Example: await db.events.insertMany(events);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
 }
 ```
 
-### Database Schema
+**That's it!** The package handles all client-side batching, retries, and reliable delivery. Your backend just needs to accept and store the events.
 
-```sql
-CREATE TABLE events (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  session_id TEXT NOT NULL,
-  user_id TEXT,
-  app_name TEXT,
-  event_type TEXT NOT NULL,  -- 'page_view', 'action', 'page_exit'
-  path TEXT,
-  action TEXT,
-  timestamp INTEGER NOT NULL,
-  time_spent INTEGER,
-  metadata TEXT,  -- JSON string
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE INDEX idx_session_id ON events(session_id);
-CREATE INDEX idx_timestamp ON events(timestamp);
-CREATE INDEX idx_event_type ON events(event_type);
-```
-
-### API Authentication (Optional)
-
-The API supports optional API key authentication via environment variable:
-
-1. Create `.env.local` file:
-   ```env
-   API_KEY=your-secret-api-key-here
-   ```
-
-2. The API will check for the API key in:
-   - `Authorization: Bearer <apiKey>` header, or
-   - `?apiKey=<apiKey>` query parameter
-
-If `API_KEY` is set in environment variables, requests without a valid key will return `401 Unauthorized`.
-
-### Testing Backend Integration
-
-1. **Start the dev server:**
-   ```bash
-   npm run dev
-   ```
-
-2. **Navigate through the app** and perform various actions
-
-3. **Check the database:**
-   - Visit `/database` to see stored events
-   - Or query the API directly: `curl http://localhost:3000/api/journey`
-
-4. **Verify batching:**
-   - Perform actions quickly - they should batch together
-   - Wait 30 seconds - events should auto-flush
-   - Or click "Flush to Backend" in Journey Viewer
 
 ---
 

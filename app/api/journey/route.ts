@@ -16,32 +16,43 @@ if (!existsSync(dataDir)) {
 let db: Database.Database | null = null;
 
 function getDatabase() {
-  if (!db) {
-    db = new Database(dbPath);
-    
-    // Create table if not exists
-    db.exec(`
-      CREATE TABLE IF NOT EXISTS events (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        session_id TEXT NOT NULL,
-        user_id TEXT,
-        app_name TEXT,
-        event_type TEXT NOT NULL,
-        path TEXT,
-        action TEXT,
-        timestamp INTEGER NOT NULL,
-        time_spent INTEGER,
-        metadata TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
+  // Check if we're in a serverless environment (like Vercel)
+  // SQLite doesn't work on serverless platforms with read-only filesystem
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    throw new Error('SQLite database is not available on serverless platforms. Use a cloud database service instead.');
+  }
 
-    // Create index for faster queries
-    db.exec(`
-      CREATE INDEX IF NOT EXISTS idx_session_id ON events(session_id);
-      CREATE INDEX IF NOT EXISTS idx_timestamp ON events(timestamp);
-      CREATE INDEX IF NOT EXISTS idx_event_type ON events(event_type);
-    `);
+  if (!db) {
+    try {
+      db = new Database(dbPath);
+      
+      // Create table if not exists
+      db.exec(`
+        CREATE TABLE IF NOT EXISTS events (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          session_id TEXT NOT NULL,
+          user_id TEXT,
+          app_name TEXT,
+          event_type TEXT NOT NULL,
+          path TEXT,
+          action TEXT,
+          timestamp INTEGER NOT NULL,
+          time_spent INTEGER,
+          metadata TEXT,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // Create index for faster queries
+      db.exec(`
+        CREATE INDEX IF NOT EXISTS idx_session_id ON events(session_id);
+        CREATE INDEX IF NOT EXISTS idx_timestamp ON events(timestamp);
+        CREATE INDEX IF NOT EXISTS idx_event_type ON events(event_type);
+      `);
+    } catch (error) {
+      console.error('Failed to initialize SQLite database:', error);
+      throw error;
+    }
   }
   return db;
 }
@@ -106,8 +117,22 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error processing journey events:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    
+    // Check if it's a serverless environment error
+    if (errorMessage.includes('serverless') || errorMessage.includes('read-only')) {
+      return NextResponse.json(
+        { 
+          error: 'Database not available',
+          message: 'SQLite database is not available on serverless platforms like Vercel. This feature requires a traditional server environment or a cloud database service.',
+          serverless: true
+        },
+        { status: 503 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -143,8 +168,22 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error querying events:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    
+    // Check if it's a serverless environment error
+    if (errorMessage.includes('serverless') || errorMessage.includes('read-only')) {
+      return NextResponse.json(
+        { 
+          error: 'Database not available',
+          message: 'SQLite database is not available on serverless platforms like Vercel. This feature requires a traditional server environment or a cloud database service.',
+          serverless: true
+        },
+        { status: 503 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

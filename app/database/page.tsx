@@ -38,15 +38,23 @@ export default function DatabaseViewer() {
       if (filter.limit) params.append("limit", filter.limit.toString());
 
       const response = await fetch(`/api/journey?${params.toString()}`);
-      if (!response.ok) throw new Error("Failed to fetch events");
-
       const data = await response.json();
+      
+      if (!response.ok) {
+        // Check if it's a serverless environment error
+        if (data.serverless) {
+          throw new Error("SERVERLESS_ERROR");
+        }
+        throw new Error(data.message || data.error || "Failed to fetch events");
+      }
+
       setEvents(data.events || []);
       trackAction("Database Viewer: Fetched Events", {
         eventCount: data.events?.length || 0,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch events");
+      const errorMessage = err instanceof Error ? err.message : "Failed to fetch events";
+      setError(errorMessage);
       console.error("Error fetching events:", err);
     } finally {
       setLoading(false);
@@ -189,6 +197,36 @@ export default function DatabaseViewer() {
             <div className="p-8 text-center text-gray-600 dark:text-gray-400">
               Loading events...
             </div>
+          ) : error === "SERVERLESS_ERROR" ? (
+            <div className="p-8">
+              <div className="rounded-lg border-2 border-yellow-200 bg-yellow-50 p-6 dark:border-yellow-800 dark:bg-yellow-900/20">
+                <h3 className="mb-3 text-lg font-semibold text-yellow-900 dark:text-yellow-200">
+                  ⚠️ Database Not Available on Serverless Platforms
+                </h3>
+                <p className="mb-4 text-yellow-800 dark:text-yellow-300">
+                  SQLite database is not available on serverless platforms like Vercel, Netlify, or AWS Lambda. 
+                  These platforms have a read-only filesystem, which prevents SQLite from working.
+                </p>
+                <div className="space-y-2 text-sm text-yellow-700 dark:text-yellow-400">
+                  <p><strong>This feature works in:</strong></p>
+                  <ul className="list-inside list-disc space-y-1">
+                    <li>Local development environment</li>
+                    <li>Traditional server deployments (VPS, dedicated servers)</li>
+                    <li>Docker containers with persistent volumes</li>
+                  </ul>
+                  <p className="mt-4"><strong>For serverless platforms, use:</strong></p>
+                  <ul className="list-inside list-disc space-y-1">
+                    <li>Cloud database services (PostgreSQL, MySQL, MongoDB)</li>
+                    <li>Serverless databases (PlanetScale, Supabase, Neon)</li>
+                    <li>External API endpoints for event storage</li>
+                  </ul>
+                </div>
+                <p className="mt-4 text-sm text-yellow-700 dark:text-yellow-400">
+                  <strong>Note:</strong> All other features of the package work perfectly on serverless platforms. 
+                  Only the database storage feature requires a different setup.
+                </p>
+              </div>
+            </div>
           ) : error ? (
             <div className="p-8 text-center text-red-600 dark:text-red-400">
               Error: {error}
@@ -291,20 +329,25 @@ export default function DatabaseViewer() {
         </div>
 
         {/* Info Box */}
-        <div className="mt-8 rounded-lg bg-blue-50 p-6 dark:bg-blue-900/20">
-          <h3 className="mb-2 text-lg font-semibold text-blue-900 dark:text-blue-200">
-            About Database Events
-          </h3>
-          <ul className="list-inside list-disc space-y-1 text-sm text-blue-800 dark:text-blue-300">
-            <li>
-              Events are automatically sent to <code className="rounded bg-blue-100 px-1 dark:bg-blue-800">/api/journey</code> endpoint
-            </li>
-            <li>Events are batched (10 events or 30 seconds) for efficiency</li>
-            <li>All metadata is preserved and stored in the database</li>
-            <li>Events are stored in SQLite database at <code className="rounded bg-blue-100 px-1 dark:bg-blue-800">data/journey.db</code></li>
-            <li>Page automatically refreshes every 5 seconds</li>
-          </ul>
-        </div>
+        {!error && (
+          <div className="mt-8 rounded-lg bg-blue-50 p-6 dark:bg-blue-900/20">
+            <h3 className="mb-2 text-lg font-semibold text-blue-900 dark:text-blue-200">
+              About Database Events
+            </h3>
+            <ul className="list-inside list-disc space-y-1 text-sm text-blue-800 dark:text-blue-300">
+              <li>
+                Events are automatically sent to <code className="rounded bg-blue-100 px-1 dark:bg-blue-800">/api/journey</code> endpoint
+              </li>
+              <li>Events are batched (10 events or 30 seconds) for efficiency</li>
+              <li>All metadata is preserved and stored in the database</li>
+              <li>Events are stored in SQLite database at <code className="rounded bg-blue-100 px-1 dark:bg-blue-800">data/journey.db</code></li>
+              <li>Page automatically refreshes every 5 seconds</li>
+              <li className="mt-2 font-semibold text-yellow-700 dark:text-yellow-300">
+                ⚠️ Note: SQLite doesn't work on serverless platforms (Vercel, Netlify, etc.)
+              </li>
+            </ul>
+          </div>
+        )}
       </main>
     </div>
   );
