@@ -248,13 +248,6 @@ export default function Navigation() {
               >
                 Features
               </Link>
-              <Link
-                href="/database"
-                className="rounded-md px-3 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-900/20"
-                onClick={() => handleNavClick("Database Viewer")}
-              >
-                Database
-              </Link>
             </div>
           </div>
           

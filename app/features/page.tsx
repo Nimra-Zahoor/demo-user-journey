@@ -297,7 +297,7 @@ export default function Features() {
             </h2>
             <p className="mb-4 text-gray-600 dark:text-gray-400">
               Events are automatically sent to your backend API endpoint (<code className="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">/api/journey</code>)
-              and stored in SQLite database. Visit the Database Events page to view stored events.
+              if you configure the <code className="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">endpoint</code> prop in JourneyProvider.
             </p>
             <div className="rounded-md bg-purple-50 p-4 dark:bg-purple-900/20">
               <p className="text-sm text-purple-800 dark:text-purple-200">
@@ -306,18 +306,10 @@ export default function Features() {
               <ul className="mt-2 list-inside list-disc text-sm text-purple-700 dark:text-purple-300">
                 <li>Automatic batching (10 events or 30 seconds)</li>
                 <li>Reliable delivery using sendBeacon()</li>
-                <li>SQLite database storage</li>
                 <li>Event metadata preserved</li>
                 <li>Session tracking</li>
+                <li>Works with any backend (PostgreSQL, MongoDB, etc.)</li>
               </ul>
-            </div>
-            <div className="mt-4">
-              <a
-                href="/database"
-                className="inline-block rounded-md bg-purple-600 px-6 py-3 text-white transition-colors hover:bg-purple-700"
-              >
-                View Database Events →
-              </a>
             </div>
           </div>
 
@@ -351,7 +343,7 @@ export default function Features() {
                   <li>Session analytics</li>
                   <li>Custom metadata support</li>
                   <li>Export capabilities</li>
-                  <li>Database storage</li>
+                  <li>Backend integration (optional)</li>
                 </ul>
               </div>
             </div>
