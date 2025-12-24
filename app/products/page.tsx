@@ -12,14 +12,27 @@ export default function Products() {
     { id: 3, name: "Product C", price: "$199" },
   ];
 
-  const handleProductClick = (productName: string) => {
-    trackAction(`Products: Clicked ${productName}`);
-    alert(`Product clicked: ${productName}`);
+  const handleProductClick = (product: { id: number; name: string; price: string }) => {
+    trackAction(`Products: Clicked ${product.name}`, {
+      productId: product.id,
+      productName: product.name,
+      price: product.price,
+      category: "electronics",
+      actionType: "view_details",
+    });
+    alert(`Product clicked: ${product.name}`);
   };
 
-  const handleAddToCart = (productName: string) => {
-    trackAction(`Products: Add to Cart - ${productName}`);
-    alert(`Added to cart: ${productName}`);
+  const handleAddToCart = (product: { id: number; name: string; price: string }) => {
+    trackAction(`Products: Add to Cart - ${product.name}`, {
+      productId: product.id,
+      productName: product.name,
+      price: product.price,
+      category: "electronics",
+      actionType: "add_to_cart",
+      timestamp: Date.now(),
+    });
+    alert(`Added to cart: ${product.name}`);
   };
 
   return (
@@ -48,13 +61,13 @@ export default function Products() {
                 </p>
                 <div className="flex flex-col gap-2">
                   <button
-                    onClick={() => handleProductClick(product.name)}
+                    onClick={() => handleProductClick(product)}
                     className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                   >
                     View Details
                   </button>
                   <button
-                    onClick={() => handleAddToCart(product.name)}
+                    onClick={() => handleAddToCart(product)}
                     className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
                   >
                     Add to Cart

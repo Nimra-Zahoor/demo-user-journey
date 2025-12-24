@@ -13,13 +13,26 @@ export default function Contact() {
   });
 
   const handleInputChange = (field: string, value: string) => {
-    trackAction(`Contact: Typed in ${field} field`);
+    trackAction(`Contact: Typed in ${field} field`, {
+      fieldName: field,
+      hasValue: value.length > 0,
+      valueLength: value.length,
+      formType: "contact",
+    });
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    trackAction("Contact: Form Submitted");
+    trackAction("Contact: Form Submitted", {
+      formData: {
+        name: formData.name,
+        email: formData.email,
+        messageLength: formData.message.length,
+      },
+      formType: "contact",
+      timestamp: Date.now(),
+    });
     alert("Form submitted! (This is a demo - action tracked)");
     setFormData({ name: "", email: "", message: "" });
   };

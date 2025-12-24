@@ -1,18 +1,22 @@
 # Demo User Journey Analytics
 
-This is a **Next.js demo application** showcasing the [`user-journey-analytics`](https://www.npmjs.com/package/user-journey-analytics) npm package. This demo demonstrates how to integrate and use the journey tracking functionality in a real Next.js application.
+This is a **Next.js demo application** showcasing the [`user-journey-analytics`](https://www.npmjs.com/package/user-journey-analytics) npm package. This demo demonstrates how to integrate and use the journey tracking functionality in a real Next.js application with a complete backend integration.
 
 ## 📦 About
 
-This demo app tests all features of the `user-journey-analytics` package:
+This demo app demonstrates all features of the `user-journey-analytics` package:
 - ✅ Automatic page tracking
 - ✅ Manual action tracking
+- ✅ Action tracking with custom metadata
 - ✅ Time spent per page
 - ✅ **Backend API integration** with SQLite database
 - ✅ Event batching and automatic flushing
+- ✅ Manual flush functionality
 - ✅ Data persistence (localStorage)
 - ✅ Session tracking (sessionStorage)
 - ✅ Export to JSON, CSV, and PDF
+- ✅ Real-time journey viewer
+- ✅ Database events viewer
 
 ## 🚀 Getting Started
 
@@ -23,7 +27,7 @@ This demo app tests all features of the `user-journey-analytics` package:
 
 ### Installation
 
-1. **Install dependencies (including the published package):**
+1. **Install dependencies:**
    ```bash
    npm install
    ```
@@ -39,7 +43,7 @@ This demo app tests all features of the `user-journey-analytics` package:
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 4. **Database:**
-   The SQLite database will be automatically created at `data/journey.db` when the first event is sent.
+   The SQLite database will be automatically created at `data/journey.db` when the first event is sent to the backend API.
 
 ### Installing the Package in Your Own Project
 
@@ -48,6 +52,82 @@ To use `user-journey-analytics` in your own Next.js project:
 ```bash
 npm i user-journey-analytics
 ```
+
+## 🏗️ Project Structure
+
+```
+demo-user-journey/
+├── app/
+│   ├── layout.tsx              # JourneyProvider setup with backend integration
+│   ├── page.tsx                 # Home page with action tracking examples
+│   ├── about/
+│   │   └── page.tsx             # About page with simple action tracking
+│   ├── products/
+│   │   └── page.tsx             # Products page with product interaction tracking
+│   ├── contact/
+│   │   └── page.tsx             # Contact form with field-level tracking
+│   ├── journey/
+│   │   └── page.tsx             # Journey viewer with export and flush functionality
+│   ├── features/
+│   │   └── page.tsx             # Comprehensive features demo page
+│   ├── database/
+│   │   └── page.tsx             # Database events viewer (SQLite)
+│   ├── api/
+│   │   └── journey/
+│   │       └── route.ts         # Backend API endpoint (POST/GET)
+│   └── components/
+│       ├── Navigation.tsx       # Navigation bar with export dropdown
+│       └── ExportButton.tsx     # Fixed floating export button
+├── data/
+│   └── journey.db               # SQLite database (auto-created)
+├── package.json
+└── README.md
+```
+
+## 🎯 Pages Overview
+
+### Home Page (`/`)
+- Demonstrates action tracking with metadata
+- Multiple buttons with different action types
+- Shows how to track button clicks with custom metadata (buttonType, userAgent, etc.)
+
+### About Page (`/about`)
+- Simple action tracking examples
+- Demonstrates basic `trackAction()` usage without metadata
+
+### Products Page (`/products`)
+- Product interaction tracking
+- Demonstrates tracking product views and add-to-cart actions with product metadata (productId, productName, price, category)
+
+### Contact Page (`/contact`)
+- Form field-level tracking
+- Tracks individual field interactions (focus, typing)
+- Form submission tracking with form data metadata
+
+### Journey Viewer (`/journey`)
+- Real-time journey data viewer
+- Displays all tracked pages, actions, and page visits
+- Export functionality (JSON, CSV, PDF)
+- Manual flush to backend button
+- Clear journey functionality
+- Auto-refreshes every 2 seconds
+
+### Features Page (`/features`)
+- Comprehensive demonstration of all package features:
+  1. Action tracking with metadata
+  2. Product tracking with metadata
+  3. Manual flush to backend
+  4. Export journey data
+  5. Automatic page tracking
+  6. Backend integration overview
+
+### Database Viewer (`/database`)
+- View events stored in SQLite database
+- Filter by session ID
+- Adjustable limit
+- Real-time statistics (total events, unique sessions, page views, actions)
+- Displays event metadata
+- Auto-refreshes every 5 seconds
 
 ## 🏗️ Backend API Integration
 
@@ -60,10 +140,55 @@ This demo includes a **production-ready backend API** that stores events in SQLi
 3. **Stored in SQLite** database at `data/journey.db`
 4. **localStorage acts as buffer** - events are only cleared after successful backend confirmation
 
-### Viewing Stored Events
+### API Endpoints
 
-You can query stored events via the API:
+#### POST `/api/journey`
+Stores events in the database.
 
+**Request Body:**
+```json
+{
+  "sessionId": "session-1234567890-abc123",
+  "userId": "user-123",
+  "appName": "Demo User Journey App",
+  "events": [
+    {
+      "type": "page_view",
+      "path": "/about",
+      "timestamp": 1234567890,
+      "timeSpent": 5000,
+      "metadata": null
+    },
+    {
+      "type": "action",
+      "action": "Button: Get Started Clicked",
+      "path": "/",
+      "timestamp": 1234567890,
+      "metadata": {
+        "buttonType": "primary",
+        "page": "/"
+      }
+    }
+  ]
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "inserted": 2
+}
+```
+
+#### GET `/api/journey`
+Query stored events from the database.
+
+**Query Parameters:**
+- `sessionId` (optional): Filter by session ID
+- `limit` (optional): Limit results (default: 100)
+
+**Example:**
 ```bash
 # Get all events (last 100)
 curl http://localhost:3000/api/journey
@@ -73,6 +198,15 @@ curl http://localhost:3000/api/journey?sessionId=session-1234567890-abc123
 
 # Limit results
 curl http://localhost:3000/api/journey?limit=50
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "count": 10,
+  "events": [...]
+}
 ```
 
 ### Database Schema
@@ -91,23 +225,26 @@ CREATE TABLE events (
   metadata TEXT,  -- JSON string
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE INDEX idx_session_id ON events(session_id);
+CREATE INDEX idx_timestamp ON events(timestamp);
+CREATE INDEX idx_event_type ON events(event_type);
 ```
 
-### Configuration
+### API Authentication (Optional)
 
-The demo is configured in `app/layout.tsx`:
+The API supports optional API key authentication via environment variable:
 
-```tsx
-<JourneyProvider 
-  appName="Demo User Journey App"
-  devOnly={true}
-  endpoint="/api/journey"      // Backend API endpoint
-  flushInterval={30000}         // Flush every 30 seconds
-  batchSize={10}                // Flush after 10 events
-  persist={true}                // Also save to localStorage (for debugging)
-  session={true}
-/>
-```
+1. Create `.env.local` file:
+   ```env
+   API_KEY=your-secret-api-key-here
+   ```
+
+2. The API will check for the API key in:
+   - `Authorization: Bearer <apiKey>` header, or
+   - `?apiKey=<apiKey>` query parameter
+
+If `API_KEY` is set in environment variables, requests without a valid key will return `401 Unauthorized`.
 
 ## 🛠️ Implementation Guide
 
@@ -131,7 +268,10 @@ export default function RootLayout({ children }) {
         <JourneyProvider 
           appName="Demo User Journey App"
           devOnly={true}
-          persist={true}
+          endpoint="/api/journey"      // Backend API endpoint
+          flushInterval={30000}         // Flush every 30 seconds
+          batchSize={10}                // Flush after 10 events
+          persist={true}                // Also save to localStorage (for debugging)
           session={true}
         >
           {children}
@@ -152,80 +292,13 @@ export default function RootLayout({ children }) {
 | `apiKey` | `string` | `undefined` | Optional API key for backend authentication. |
 | `flushInterval` | `number` | `30000` | Time in milliseconds between automatic flushes (default: 30 seconds). |
 | `batchSize` | `number` | `10` | Number of events to buffer before auto-flushing (default: 10). |
-| `persist` | `boolean` | `false` | If `true`, saves journey data to `localStorage`. Data survives page refreshes and browser restarts. (Legacy option) |
-| `session` | `boolean` | `false` | If `true`, uses `sessionStorage` for one journey per browser tab/window. Data clears when tab is closed. (Legacy option) |
+| `persist` | `boolean` | `false` | If `true`, saves journey data to `localStorage`. Data survives page refreshes and browser restarts. |
+| `session` | `boolean` | `false` | If `true`, uses `sessionStorage` for one journey per browser tab/window. Data clears when tab is closed. |
 | `storageKey` | `string` | `"user-journey-analytics"` | Custom key for localStorage/sessionStorage. Use this if you need multiple separate trackers. |
-
-#### Prop Combinations
-
-**Example 1: Development Only (No Persistence)**
-```tsx
-<JourneyProvider 
-  appName="My App"
-  devOnly={true}
-  persist={false}
-  session={false}
->
-  {children}
-</JourneyProvider>
-```
-- Tracks only in development
-- Data is lost on page refresh
-- Each page load starts fresh
-
-**Example 2: Persistent Across Refreshes**
-```tsx
-<JourneyProvider 
-  appName="My App"
-  devOnly={false}
-  persist={true}
-  session={false}
->
-  {children}
-</JourneyProvider>
-```
-- Tracks in all environments
-- Data survives page refresh
-- Data persists until manually cleared
-
-**Example 3: Session-Based (Per Tab)**
-```tsx
-<JourneyProvider 
-  appName="My App"
-  devOnly={false}
-  persist={false}
-  session={true}
->
-  {children}
-</JourneyProvider>
-```
-- One journey per browser tab
-- Data clears when tab closes
-- Each tab has separate journey
-
-**Example 4: Full Features with Backend API (This Demo)**
-```tsx
-<JourneyProvider 
-  appName="Demo User Journey App"
-  devOnly={true}
-  endpoint="/api/journey"      // Backend API endpoint
-  flushInterval={30000}         // Flush every 30 seconds
-  batchSize={10}                // Flush after 10 events
-  persist={true}                // Also save to localStorage (for debugging)
-  session={true}
->
-  {children}
-</JourneyProvider>
-```
-- Tracks in development only
-- Events are batched and sent to backend API
-- Data persists across refreshes (localStorage buffer)
-- Session-based (per tab)
-- **Note:** When both `persist` and `session` are enabled, `sessionStorage` takes precedence
 
 ### 2. Using the useJourney Hook
 
-The `useJourney()` hook provides three functions for tracking and managing journey data. It can be used in any client component.
+The `useJourney()` hook provides functions for tracking and managing journey data. It can be used in any client component.
 
 #### Import and Usage
 
@@ -235,7 +308,7 @@ The `useJourney()` hook provides three functions for tracking and managing journ
 import { useJourney } from "user-journey-analytics";
 
 export default function MyComponent() {
-  const { trackAction, exportJourney, clearJourney } = useJourney();
+  const { trackAction, exportJourney, clearJourney, flush } = useJourney();
   
   // Use the functions...
 }
@@ -243,79 +316,54 @@ export default function MyComponent() {
 
 #### Hook Functions
 
-##### `trackAction(action: string)`
+##### `trackAction(action: string, metadata?: object)`
 
 Manually track a user action (button clicks, form submissions, etc.).
 
 **Parameters:**
 - `action` (string): Description of the action being tracked
+- `metadata` (object, optional): Custom metadata object to attach to the action
 
 **Returns:** `void`
 
 **Example from `app/page.tsx`:**
 ```tsx
-export default function Home() {
-  const { trackAction } = useJourney();
+const { trackAction } = useJourney();
 
-  const handleButtonClick = (action: string) => {
-    trackAction(action);
-    alert(`Action tracked: ${action}`);
-  };
-
-  return (
-    <button onClick={() => handleButtonClick("Button: Get Started Clicked")}>
-      Get Started
-    </button>
-  );
-}
+const handleButtonClick = (action: string, buttonType: string) => {
+  trackAction(action, {
+    buttonType,
+    page: "/",
+    timestamp: Date.now(),
+    userAgent: navigator.userAgent.substring(0, 50),
+  });
+};
 ```
 
-**Example from `app/components/Navigation.tsx`:**
+**Example from `app/products/page.tsx`:**
 ```tsx
-export default function Navigation() {
-  const { trackAction } = useJourney();
-
-  const handleNavClick = (page: string) => {
-    trackAction(`Navigation: Clicked ${page}`);
-  };
-
-  return (
-    <Link 
-      href="/about"
-      onClick={() => handleNavClick("About")}
-    >
-      About
-    </Link>
-  );
-}
+const handleAddToCart = (product) => {
+  trackAction(`Products: Add to Cart - ${product.name}`, {
+    productId: product.id,
+    productName: product.name,
+    price: product.price,
+    category: "electronics",
+    actionType: "add_to_cart",
+    timestamp: Date.now(),
+  });
+};
 ```
 
 **Example from `app/contact/page.tsx` (Form Tracking):**
 ```tsx
-export default function Contact() {
-  const { trackAction } = useJourney();
-  const [formData, setFormData] = useState({ name: "", email: "" });
-
-  const handleInputChange = (field: string, value: string) => {
-    trackAction(`Contact: Typed in ${field} field`);
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    trackAction("Contact: Form Submitted");
-    // ... submit logic
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input 
-        onChange={(e) => handleInputChange("name", e.target.value)}
-      />
-      {/* ... */}
-    </form>
-  );
-}
+const handleInputChange = (field: string, value: string) => {
+  trackAction(`Contact: Typed in ${field} field`, {
+    fieldName: field,
+    hasValue: value.length > 0,
+    valueLength: value.length,
+    formType: "contact",
+  });
+};
 ```
 
 ##### `exportJourney()`
@@ -334,6 +382,7 @@ Export the complete journey data as a JavaScript object.
     page: string;
     action: string;
     time: string;              // ISO timestamp
+    metadata?: object;         // Custom metadata
   }>;
   pageVisits: Array<{          // Array of page visits with timing
     path: string;
@@ -346,33 +395,6 @@ Export the complete journey data as a JavaScript object.
 }
 ```
 
-**Example from `app/journey/page.tsx`:**
-```tsx
-export default function JourneyViewer() {
-  const { exportJourney } = useJourney();
-  const [journeyData, setJourneyData] = useState(null);
-
-  const refreshData = () => {
-    const data = exportJourney();
-    setJourneyData(data);
-  };
-
-  useEffect(() => {
-    refreshData();
-    const interval = setInterval(refreshData, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div>
-      <p>Pages Visited: {journeyData?.pages?.length || 0}</p>
-      <p>Actions Tracked: {journeyData?.actions?.length || 0}</p>
-      {/* Display data... */}
-    </div>
-  );
-}
-```
-
 ##### `clearJourney()`
 
 Clear all tracked journey data.
@@ -381,24 +403,24 @@ Clear all tracked journey data.
 
 **Returns:** `void`
 
+##### `flush()`
+
+Manually flush pending events to the backend API.
+
+**Parameters:** None
+
+**Returns:** `Promise<void>`
+
 **Example:**
 ```tsx
-export default function JourneyViewer() {
-  const { clearJourney, exportJourney } = useJourney();
-
-  const handleClear = () => {
-    if (confirm("Are you sure you want to clear all journey data?")) {
-      clearJourney();
-      // Journey data is now cleared
-    }
-  };
-
-  return (
-    <button onClick={handleClear}>
-      Clear Journey
-    </button>
-  );
-}
+const handleFlush = async () => {
+  try {
+    await flush();
+    console.log("Events flushed successfully!");
+  } catch (error) {
+    console.error("Flush error:", error);
+  }
+};
 ```
 
 ### 3. Automatic Page Tracking
@@ -411,18 +433,11 @@ Once `JourneyProvider` is set up, **page navigation is automatically tracked**. 
 - Time spent on the previous page is calculated and stored
 - A new page visit entry is created with timestamp
 
-**Example:**
-If a user navigates from `/` to `/about`, the following happens automatically:
-1. Time spent on `/` is calculated
-2. `/about` is added to the `pages` array
-3. A new entry is added to `pageVisits` with timestamp
-4. The timestamp for `/about` is stored
-
 **No code required** - it just works! ✨
 
 ### 4. Export Functionality
 
-This demo includes three export formats:
+This demo includes three export formats implemented in multiple places:
 
 #### JSON Export
 ```tsx
@@ -465,44 +480,42 @@ const handleExportPDF = () => {
 };
 ```
 
-See `app/journey/page.tsx` for complete implementation.
-
-## 📁 Project Structure
-
-```
-demo-user-journey/
-├── app/
-│   ├── layout.tsx          # JourneyProvider setup
-│   ├── page.tsx            # Home page with action tracking
-│   ├── about/
-│   │   └── page.tsx        # About page
-│   ├── products/
-│   │   └── page.tsx        # Products page with interactions
-│   ├── contact/
-│   │   └── page.tsx        # Contact form with field tracking
-│   ├── journey/
-│   │   └── page.tsx        # Journey viewer with export functionality
-│   └── components/
-│       └── Navigation.tsx  # Navigation with click tracking
-├── package.json
-└── README.md
-```
+See `app/journey/page.tsx`, `app/components/Navigation.tsx`, and `app/components/ExportButton.tsx` for complete implementations.
 
 ## 🧪 Testing
-
-See [TESTING_GUIDE.md](./TESTING_GUIDE.md) for comprehensive testing instructions.
 
 ### Quick Test Checklist
 
 - [ ] Navigate between pages → Pages are automatically tracked
 - [ ] Click buttons → Actions are tracked
 - [ ] Fill forms → Form interactions are tracked
-- [ ] Visit Journey Viewer → See all tracked data
+- [ ] Visit Journey Viewer (`/journey`) → See all tracked data in real-time
 - [ ] Export JSON → Download works
 - [ ] Export CSV → Download works, opens in Excel
 - [ ] Export PDF → Download works, displays correctly
+- [ ] Manual Flush → Events sent to backend immediately
+- [ ] Visit Database Viewer (`/database`) → See events stored in SQLite
 - [ ] Refresh page → Data persists (if `persist={true}`)
 - [ ] Open new tab → Separate session (if `session={true}`)
+- [ ] Visit Features page (`/features`) → See all features demonstrated
+
+### Testing Backend Integration
+
+1. **Start the dev server:**
+   ```bash
+   npm run dev
+   ```
+
+2. **Navigate through the app** and perform various actions
+
+3. **Check the database:**
+   - Visit `/database` to see stored events
+   - Or query the API directly: `curl http://localhost:3000/api/journey`
+
+4. **Verify batching:**
+   - Perform actions quickly - they should batch together
+   - Wait 30 seconds - events should auto-flush
+   - Or click "Flush to Backend" in Journey Viewer
 
 ## 🔍 Key Implementation Points
 
@@ -550,7 +563,7 @@ Use `useJourney()` in any client component that needs to track actions or access
 import { useJourney } from "user-journey-analytics";
 
 export default function MyComponent() {
-  const { trackAction, exportJourney, clearJourney } = useJourney();
+  const { trackAction, exportJourney, clearJourney, flush } = useJourney();
   // Use functions...
 }
 ```
@@ -560,16 +573,31 @@ export default function MyComponent() {
 - Use descriptive action names: `"Button: Get Started Clicked"` instead of `"click"`
 - Include context: `"Contact: Form Submitted"` instead of `"submit"`
 - Group by feature: `"Products: Add to Cart - Product A"`
-## 📚 Learn More
+- Add metadata for rich analytics: product IDs, prices, categories, user info, etc.
 
-- **Package on npm:** [user-journey-analytics](https://www.npmjs.com/package/user-journey-analytics)
-- **Testing Guide:** See [TESTING_GUIDE.md](./TESTING_GUIDE.md)
-- **Next.js Documentation:** [https://nextjs.org/docs](https://nextjs.org/docs)
+### 5. Backend Integration
 
-## 🤝 Contributing
+- Events are automatically batched (10 events or 30 seconds)
+- Uses `navigator.sendBeacon()` for reliable delivery
+- Events are only cleared from localStorage after successful backend confirmation
+- Manual flush available via `flush()` function
 
-This is a demo application. For issues or contributions related to the `user-journey-analytics` repo itself, please refer to the [demo repository](https://github.com/Nimra-Zahoor/demo-user-journey).
+## 📚 Dependencies
+
+This demo uses the following key dependencies:
+
+- **user-journey-analytics** (^1.0.3) - The main tracking package
+- **next** (16.1.0) - Next.js framework
+- **react** (19.2.3) - React library
+- **better-sqlite3** (^12.5.0) - SQLite database for backend storage
+- **jspdf** (^3.0.4) - PDF generation
+- **jspdf-autotable** (^5.0.2) - PDF table generation
+- **tailwindcss** (^4) - Styling
 
 ## 📄 License
 
 This demo application is for testing and demonstration purposes.
+
+## 🤝 Contributing
+
+This is a demo application. For issues or contributions related to the `user-journey-analytics` package itself, please refer to the package repository.

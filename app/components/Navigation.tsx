@@ -241,6 +241,20 @@ export default function Navigation() {
               >
                 View Journey
               </Link>
+              <Link
+                href="/features"
+                className="rounded-md px-3 py-2 text-sm font-medium text-purple-600 hover:bg-purple-50 dark:text-purple-400 dark:hover:bg-purple-900/20"
+                onClick={() => handleNavClick("Features Demo")}
+              >
+                Features
+              </Link>
+              <Link
+                href="/database"
+                className="rounded-md px-3 py-2 text-sm font-medium text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-900/20"
+                onClick={() => handleNavClick("Database Viewer")}
+              >
+                Database
+              </Link>
             </div>
           </div>
           

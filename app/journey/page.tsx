@@ -7,8 +7,9 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 export default function JourneyViewer() {
-  const { exportJourney, clearJourney, trackAction } = useJourney();
+  const { exportJourney, clearJourney, trackAction, flush } = useJourney();
   const [journeyData, setJourneyData] = useState<any>(null);
+  const [flushStatus, setFlushStatus] = useState<string>("");
 
   const refreshData = () => {
     const data = exportJourney();
@@ -219,6 +220,20 @@ export default function JourneyViewer() {
     }
   };
 
+  const handleFlush = async () => {
+    setFlushStatus("Flushing...");
+    try {
+      await flush();
+      setFlushStatus("✅ Events flushed successfully!");
+      trackAction("Journey Viewer: Manual Flush Completed");
+      setTimeout(() => setFlushStatus(""), 3000);
+    } catch (error) {
+      setFlushStatus("❌ Failed to flush events");
+      console.error("Flush error:", error);
+      setTimeout(() => setFlushStatus(""), 3000);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
       <Navigation />
@@ -240,6 +255,18 @@ export default function JourneyViewer() {
               >
                 Refresh
               </button>
+              <button
+                onClick={handleFlush}
+                className="rounded-md bg-indigo-600 px-4 py-2 text-white transition-colors hover:bg-indigo-700"
+                title="Flush events to backend"
+              >
+                Flush to Backend
+              </button>
+              {flushStatus && (
+                <span className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {flushStatus}
+                </span>
+              )}
               <div className="flex gap-2">
                 <button
                   onClick={handleExportJSON}
