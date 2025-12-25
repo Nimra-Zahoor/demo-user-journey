@@ -194,8 +194,6 @@ export default function Navigation() {
     setExportMenuOpen(false);
   };
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   return (
     <nav className="w-full border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-black">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
