@@ -93,49 +93,49 @@ export default function Features() {
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
       <Navigation />
-      <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mb-8 rounded-lg bg-white p-8 shadow-lg dark:bg-gray-900">
-          <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
+      <main className="mx-auto max-w-6xl px-4 py-6 sm:py-8 md:py-12 sm:px-6 lg:px-8">
+        <div className="mb-6 sm:mb-8 rounded-lg bg-white p-4 sm:p-6 md:p-8 shadow-lg dark:bg-gray-900">
+          <h1 className="mb-4 text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
             Features Demo
           </h1>
-          <p className="mb-6 text-lg text-gray-600 dark:text-gray-400">
+          <p className="mb-6 text-base sm:text-lg text-gray-600 dark:text-gray-400">
             This page demonstrates all features of the user-journey-analytics package.
           </p>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Feature 1: Action Tracking with Metadata */}
-          <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-900">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          <div className="rounded-lg bg-white p-4 sm:p-6 shadow-lg dark:bg-gray-900">
+            <h2 className="mb-4 text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
               1. Action Tracking with Metadata
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Track actions with custom metadata for detailed analytics. Metadata is stored
               with each action and can be exported or sent to your backend.
             </p>
             <button
               onClick={handleActionWithMetadata}
-              className="rounded-md bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
+              className="rounded-md bg-blue-600 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-white transition-colors hover:bg-blue-700"
             >
               Track Action with Metadata
             </button>
-            <div className="mt-4 rounded-md bg-gray-100 p-4 dark:bg-gray-800">
-              <p className="text-sm text-gray-700 dark:text-gray-300">
+            <div className="mt-4 rounded-md bg-gray-100 p-3 sm:p-4 dark:bg-gray-800">
+              <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
                 <strong>Metadata included:</strong> buttonId, timestamp, userAgent, screenWidth, screenHeight
               </p>
             </div>
           </div>
 
           {/* Feature 2: Product Tracking with Metadata */}
-          <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-900">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          <div className="rounded-lg bg-white p-4 sm:p-6 shadow-lg dark:bg-gray-900">
+            <h2 className="mb-4 text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
               2. Product Tracking with Metadata
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Track product interactions with detailed metadata (productId, price, category, etc.).
             </p>
             <form onSubmit={handleFormSubmit} className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Product Name
@@ -189,31 +189,31 @@ export default function Features() {
                   />
                 </div>
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 <button
                   type="button"
                   onClick={() => handleProductAction("View Details")}
-                  className="rounded-md bg-gray-600 px-4 py-2 text-white transition-colors hover:bg-gray-700"
+                  className="rounded-md bg-gray-600 px-3 py-2 sm:px-4 text-xs sm:text-sm text-white transition-colors hover:bg-gray-700"
                 >
                   Track: View Details
                 </button>
                 <button
                   type="button"
                   onClick={() => handleProductAction("Add to Cart")}
-                  className="rounded-md bg-green-600 px-4 py-2 text-white transition-colors hover:bg-green-700"
+                  className="rounded-md bg-green-600 px-3 py-2 sm:px-4 text-xs sm:text-sm text-white transition-colors hover:bg-green-700"
                 >
                   Track: Add to Cart
                 </button>
                 <button
                   type="button"
                   onClick={() => handleProductAction("Add to Wishlist")}
-                  className="rounded-md bg-purple-600 px-4 py-2 text-white transition-colors hover:bg-purple-700"
+                  className="rounded-md bg-purple-600 px-3 py-2 sm:px-4 text-xs sm:text-sm text-white transition-colors hover:bg-purple-700"
                 >
                   Track: Add to Wishlist
                 </button>
                 <button
                   type="submit"
-                  className="rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+                  className="rounded-md bg-blue-600 px-3 py-2 sm:px-4 text-xs sm:text-sm text-white transition-colors hover:bg-blue-700"
                 >
                   Submit Form (Track)
                 </button>
@@ -222,29 +222,29 @@ export default function Features() {
           </div>
 
           {/* Feature 3: Manual Flush */}
-          <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-900">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          <div className="rounded-lg bg-white p-4 sm:p-6 shadow-lg dark:bg-gray-900">
+            <h2 className="mb-4 text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
               3. Manual Flush to Backend
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Manually flush pending events to your backend API. Events are automatically batched
               and sent, but you can trigger an immediate flush if needed.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
               <button
                 onClick={handleManualFlush}
-                className="rounded-md bg-indigo-600 px-6 py-3 text-white transition-colors hover:bg-indigo-700"
+                className="rounded-md bg-indigo-600 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-white transition-colors hover:bg-indigo-700"
               >
                 Flush Events to Backend
               </button>
               {flushStatus && (
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
                   {flushStatus}
                 </span>
               )}
             </div>
-            <div className="mt-4 rounded-md bg-blue-50 p-4 dark:bg-blue-900/20">
-              <p className="text-sm text-blue-800 dark:text-blue-200">
+            <div className="mt-4 rounded-md bg-blue-50 p-3 sm:p-4 dark:bg-blue-900/20">
+              <p className="text-xs sm:text-sm text-blue-800 dark:text-blue-200">
                 <strong>Note:</strong> Events are automatically flushed every 30 seconds or after
                 10 events. This button allows you to manually trigger a flush immediately.
               </p>
@@ -252,21 +252,21 @@ export default function Features() {
           </div>
 
           {/* Feature 4: Export Journey */}
-          <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-900">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          <div className="rounded-lg bg-white p-4 sm:p-6 shadow-lg dark:bg-gray-900">
+            <h2 className="mb-4 text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
               4. Export Journey Data
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Export the complete journey data including all pages, actions, and metadata.
             </p>
             <button
               onClick={handleExportJourney}
-              className="rounded-md bg-green-600 px-6 py-3 text-white transition-colors hover:bg-green-700"
+              className="rounded-md bg-green-600 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-white transition-colors hover:bg-green-700"
             >
               Export Journey (Check Console)
             </button>
-            <div className="mt-4 rounded-md bg-gray-100 p-4 dark:bg-gray-800">
-              <p className="text-sm text-gray-700 dark:text-gray-300">
+            <div className="mt-4 rounded-md bg-gray-100 p-3 sm:p-4 dark:bg-gray-800">
+              <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
                 <strong>Exported data includes:</strong> appName, sessionStart, pages, actions
                 (with metadata), pageVisits (with timeSpent), timestamps
               </p>
@@ -274,16 +274,16 @@ export default function Features() {
           </div>
 
           {/* Feature 5: Automatic Page Tracking */}
-          <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-900">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          <div className="rounded-lg bg-white p-4 sm:p-6 shadow-lg dark:bg-gray-900">
+            <h2 className="mb-4 text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
               5. Automatic Page Tracking
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <p className="mb-4 text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Page navigation is automatically tracked when you visit different pages. Time spent
               on each page is calculated automatically.
             </p>
-            <div className="rounded-md bg-green-50 p-4 dark:bg-green-900/20">
-              <p className="text-sm text-green-800 dark:text-green-200">
+            <div className="rounded-md bg-green-50 p-3 sm:p-4 dark:bg-green-900/20">
+              <p className="text-xs sm:text-sm text-green-800 dark:text-green-200">
                 <strong>✅ Active:</strong> This page visit was automatically tracked. Navigate to
                 other pages to see more page views in the Journey Viewer.
               </p>
@@ -291,19 +291,19 @@ export default function Features() {
           </div>
 
           {/* Feature 6: Backend Integration */}
-          <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-900">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          <div className="rounded-lg bg-white p-4 sm:p-6 shadow-lg dark:bg-gray-900">
+            <h2 className="mb-4 text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
               6. Backend Integration (SQLite)
             </h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
-              Events are automatically sent to your backend API endpoint (<code className="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">/api/journey</code>)
-              if you configure the <code className="rounded bg-gray-100 px-2 py-1 dark:bg-gray-800">endpoint</code> prop in JourneyProvider.
+            <p className="mb-4 text-sm sm:text-base text-gray-600 dark:text-gray-400">
+              Events are automatically sent to your backend API endpoint (<code className="rounded bg-gray-100 px-1 sm:px-2 py-1 text-xs sm:text-sm dark:bg-gray-800">/api/journey</code>)
+              if you configure the <code className="rounded bg-gray-100 px-1 sm:px-2 py-1 text-xs sm:text-sm dark:bg-gray-800">endpoint</code> prop in JourneyProvider.
             </p>
-            <div className="rounded-md bg-purple-50 p-4 dark:bg-purple-900/20">
-              <p className="text-sm text-purple-800 dark:text-purple-200">
+            <div className="rounded-md bg-purple-50 p-3 sm:p-4 dark:bg-purple-900/20">
+              <p className="text-xs sm:text-sm text-purple-800 dark:text-purple-200">
                 <strong>Backend Features:</strong>
               </p>
-              <ul className="mt-2 list-inside list-disc text-sm text-purple-700 dark:text-purple-300">
+              <ul className="mt-2 list-inside list-disc text-xs sm:text-sm text-purple-700 dark:text-purple-300">
                 <li>Automatic batching (10 events or 30 seconds)</li>
                 <li>Reliable delivery using sendBeacon()</li>
                 <li>Event metadata preserved</li>
@@ -314,14 +314,14 @@ export default function Features() {
           </div>
 
           {/* Summary */}
-          <div className="rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 p-6 dark:from-blue-900/20 dark:to-indigo-900/20">
-            <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-gray-200">
+          <div className="rounded-lg bg-gradient-to-r from-blue-50 to-indigo-50 p-4 sm:p-6 dark:from-blue-900/20 dark:to-indigo-900/20">
+            <h2 className="mb-4 text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
               Package Features Summary
             </h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-md bg-white p-4 dark:bg-gray-800">
-                <h3 className="font-semibold text-gray-800 dark:text-gray-200">✅ Implemented</h3>
-                <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-gray-600 dark:text-gray-400">
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+              <div className="rounded-md bg-white p-3 sm:p-4 dark:bg-gray-800">
+                <h3 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">✅ Implemented</h3>
+                <ul className="mt-2 list-inside list-disc space-y-1 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   <li>Automatic page tracking</li>
                   <li>Manual action tracking</li>
                   <li>Action tracking with metadata</li>
@@ -334,9 +334,9 @@ export default function Features() {
                   <li>Session tracking (sessionStorage)</li>
                 </ul>
               </div>
-              <div className="rounded-md bg-white p-4 dark:bg-gray-800">
-                <h3 className="font-semibold text-gray-800 dark:text-gray-200">📊 Analytics</h3>
-                <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-gray-600 dark:text-gray-400">
+              <div className="rounded-md bg-white p-3 sm:p-4 dark:bg-gray-800">
+                <h3 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">📊 Analytics</h3>
+                <ul className="mt-2 list-inside list-disc space-y-1 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   <li>Page visit tracking</li>
                   <li>User action tracking</li>
                   <li>Time spent analytics</li>

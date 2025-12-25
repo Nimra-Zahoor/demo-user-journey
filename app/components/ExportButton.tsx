@@ -200,17 +200,17 @@ export default function ExportButton() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
       <div className="relative">
         {/* Main Export Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-white shadow-lg transition-all hover:bg-blue-700 hover:shadow-xl"
+          className="flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 sm:px-6 sm:py-3 text-white shadow-lg transition-all hover:bg-blue-700 hover:shadow-xl"
           title="Export Journey Data"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
+            className="h-4 w-4 sm:h-5 sm:w-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -222,7 +222,7 @@ export default function ExportButton() {
               d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          <span className="font-medium">Export</span>
+          <span className="text-sm sm:text-base font-medium">Export</span>
         </button>
 
         {/* Dropdown Menu */}
@@ -235,15 +235,15 @@ export default function ExportButton() {
             />
             
             {/* Menu */}
-            <div className="absolute bottom-full right-0 mb-2 w-48 rounded-lg bg-white shadow-xl dark:bg-gray-800">
+            <div className="absolute bottom-full right-0 mb-2 w-44 sm:w-48 rounded-lg bg-white shadow-xl dark:bg-gray-800">
               <div className="p-2">
                 <button
                   onClick={handleExportJSON}
-                  className="flex w-full items-center gap-3 rounded-md px-4 py-2 text-left text-sm text-gray-700 transition-colors hover:bg-green-50 hover:text-green-700 dark:text-gray-300 dark:hover:bg-green-900/20 dark:hover:text-green-400"
+                  className="flex w-full items-center gap-2 sm:gap-3 rounded-md px-3 py-2 sm:px-4 text-left text-xs sm:text-sm text-gray-700 transition-colors hover:bg-green-50 hover:text-green-700 dark:text-gray-300 dark:hover:bg-green-900/20 dark:hover:text-green-400"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-600"
+                    className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -260,11 +260,11 @@ export default function ExportButton() {
 
                 <button
                   onClick={handleExportCSV}
-                  className="flex w-full items-center gap-3 rounded-md px-4 py-2 text-left text-sm text-gray-700 transition-colors hover:bg-blue-50 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
+                  className="flex w-full items-center gap-2 sm:gap-3 rounded-md px-3 py-2 sm:px-4 text-left text-xs sm:text-sm text-gray-700 transition-colors hover:bg-blue-50 hover:text-blue-700 dark:text-gray-300 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-blue-600"
+                    className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -281,11 +281,11 @@ export default function ExportButton() {
 
                 <button
                   onClick={handleExportPDF}
-                  className="flex w-full items-center gap-3 rounded-md px-4 py-2 text-left text-sm text-gray-700 transition-colors hover:bg-red-50 hover:text-red-700 dark:text-gray-300 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+                  className="flex w-full items-center gap-2 sm:gap-3 rounded-md px-3 py-2 sm:px-4 text-left text-xs sm:text-sm text-gray-700 transition-colors hover:bg-red-50 hover:text-red-700 dark:text-gray-300 dark:hover:bg-red-900/20 dark:hover:text-red-400"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-red-600"
+                    className="h-4 w-4 sm:h-5 sm:w-5 text-red-600 flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

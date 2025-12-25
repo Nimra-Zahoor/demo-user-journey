@@ -237,54 +237,54 @@ export default function JourneyViewer() {
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
       <Navigation />
-      <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="rounded-lg bg-white p-8 shadow-lg dark:bg-gray-900">
-          <div className="mb-6 flex items-center justify-between">
+      <main className="mx-auto max-w-6xl px-4 py-6 sm:py-8 md:py-12 sm:px-6 lg:px-8">
+        <div className="rounded-lg bg-white p-4 sm:p-6 md:p-8 shadow-lg dark:bg-gray-900">
+          <div className="mb-6 space-y-4">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
                 Journey Viewer
               </h1>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">
+              <p className="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400">
                 View and export your tracked user journey data
               </p>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3">
               <button
                 onClick={refreshData}
-                className="rounded-md bg-gray-600 px-4 py-2 text-white transition-colors hover:bg-gray-700"
+                className="rounded-md bg-gray-600 px-3 py-2 sm:px-4 text-xs sm:text-sm text-white transition-colors hover:bg-gray-700"
               >
                 Refresh
               </button>
               <button
                 onClick={handleFlush}
-                className="rounded-md bg-indigo-600 px-4 py-2 text-white transition-colors hover:bg-indigo-700"
+                className="rounded-md bg-indigo-600 px-3 py-2 sm:px-4 text-xs sm:text-sm text-white transition-colors hover:bg-indigo-700"
                 title="Flush events to backend"
               >
                 Flush to Backend
               </button>
               {flushStatus && (
-                <span className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span className="flex items-center px-3 py-2 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
                   {flushStatus}
                 </span>
               )}
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <button
                   onClick={handleExportJSON}
-                  className="rounded-md bg-green-600 px-4 py-2 text-sm text-white transition-colors hover:bg-green-700"
+                  className="rounded-md bg-green-600 px-3 py-2 text-xs sm:text-sm text-white transition-colors hover:bg-green-700"
                   title="Export as JSON"
                 >
                   Export JSON
                 </button>
                 <button
                   onClick={handleExportCSV}
-                  className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-700"
+                  className="rounded-md bg-blue-600 px-3 py-2 text-xs sm:text-sm text-white transition-colors hover:bg-blue-700"
                   title="Export as CSV"
                 >
                   Export CSV
                 </button>
                 <button
                   onClick={handleExportPDF}
-                  className="rounded-md bg-red-600 px-4 py-2 text-sm text-white transition-colors hover:bg-red-700"
+                  className="rounded-md bg-red-600 px-3 py-2 text-xs sm:text-sm text-white transition-colors hover:bg-red-700"
                   title="Export as PDF"
                 >
                   Export PDF
@@ -292,7 +292,7 @@ export default function JourneyViewer() {
               </div>
               <button
                 onClick={handleClear}
-                className="rounded-md bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
+                className="rounded-md bg-red-600 px-3 py-2 sm:px-4 text-xs sm:text-sm text-white transition-colors hover:bg-red-700"
               >
                 Clear Journey
               </button>
@@ -300,57 +300,57 @@ export default function JourneyViewer() {
           </div>
 
           {journeyData ? (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Summary Section */}
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
+                <div className="rounded-lg border border-gray-200 p-3 sm:p-4 dark:border-gray-700">
+                  <h3 className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">
                     App Name
                   </h3>
-                  <p className="mt-1 text-xl font-semibold text-gray-900 dark:text-white">
+                  <p className="mt-1 text-lg sm:text-xl font-semibold text-gray-900 dark:text-white break-words">
                     {journeyData.appName || "N/A"}
                   </p>
                 </div>
-                <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                <div className="rounded-lg border border-gray-200 p-3 sm:p-4 dark:border-gray-700">
+                  <h3 className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">
                     Pages Visited
                   </h3>
-                  <p className="mt-1 text-xl font-semibold text-gray-900 dark:text-white">
+                  <p className="mt-1 text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                     {journeyData.pages?.length || 0}
                   </p>
                 </div>
-                <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                <div className="rounded-lg border border-gray-200 p-3 sm:p-4 dark:border-gray-700">
+                  <h3 className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">
                     Actions Tracked
                   </h3>
-                  <p className="mt-1 text-xl font-semibold text-gray-900 dark:text-white">
+                  <p className="mt-1 text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                     {journeyData.actions?.length || 0}
                   </p>
                 </div>
               </div>
 
               {/* Session Start */}
-              <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-                <h3 className="mb-2 text-lg font-semibold text-gray-800 dark:text-gray-200">
+              <div className="rounded-lg border border-gray-200 p-3 sm:p-4 dark:border-gray-700">
+                <h3 className="mb-2 text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
                   Session Start
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 break-words">
                   {formatTimestamp(journeyData.sessionStart)}
                 </p>
               </div>
 
               {/* Pages Visited */}
-              <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-                <h3 className="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-200">
+              <div className="rounded-lg border border-gray-200 p-3 sm:p-4 dark:border-gray-700">
+                <h3 className="mb-4 text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
                   Pages Visited ({journeyData.pages?.length || 0})
                 </h3>
                 <div className="space-y-2">
                   {journeyData.pages?.map((page: string, index: number) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between rounded-md bg-gray-50 p-3 dark:bg-gray-800"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-md bg-gray-50 p-3 dark:bg-gray-800"
                     >
-                      <span className="font-mono text-sm text-gray-900 dark:text-white">
+                      <span className="font-mono text-xs sm:text-sm text-gray-900 dark:text-white break-words">
                         {page}
                       </span>
                       {journeyData.timestamps?.[page] && (
@@ -364,8 +364,8 @@ export default function JourneyViewer() {
               </div>
 
               {/* Page Visits with Time Spent */}
-              <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-                <h3 className="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-200">
+              <div className="rounded-lg border border-gray-200 p-3 sm:p-4 dark:border-gray-700">
+                <h3 className="mb-4 text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
                   Page Visits with Time Spent ({journeyData.pageVisits?.length || 0})
                 </h3>
                 <div className="space-y-2">
@@ -373,18 +373,18 @@ export default function JourneyViewer() {
                     (visit: any, index: number) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between rounded-md bg-gray-50 p-3 dark:bg-gray-800"
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-md bg-gray-50 p-3 dark:bg-gray-800"
                       >
-                        <div>
-                          <span className="font-mono text-sm font-semibold text-gray-900 dark:text-white">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                          <span className="font-mono text-xs sm:text-sm font-semibold text-gray-900 dark:text-white break-words">
                             {visit.path}
                           </span>
-                          <span className="ml-3 text-xs text-gray-500 dark:text-gray-400">
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
                             {formatTimestamp(visit.timestamp)}
                           </span>
                         </div>
                         {visit.timeSpent !== undefined && (
-                          <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                          <span className="rounded-full bg-blue-100 px-2 py-1 sm:px-3 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200 self-start sm:self-auto">
                             {formatDuration(visit.timeSpent)}
                           </span>
                         )}
@@ -395,21 +395,21 @@ export default function JourneyViewer() {
               </div>
 
               {/* Actions */}
-              <div className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-                <h3 className="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-200">
+              <div className="rounded-lg border border-gray-200 p-3 sm:p-4 dark:border-gray-700">
+                <h3 className="mb-4 text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
                   Tracked Actions ({journeyData.actions?.length || 0})
                 </h3>
                 <div className="space-y-2">
                   {journeyData.actions?.map((action: any, index: number) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between rounded-md bg-gray-50 p-3 dark:bg-gray-800"
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-md bg-gray-50 p-3 dark:bg-gray-800"
                     >
-                      <div>
-                        <span className="font-semibold text-gray-900 dark:text-white">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                        <span className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white break-words">
                           {action.action}
                         </span>
-                        <span className="ml-3 font-mono text-xs text-gray-500 dark:text-gray-400">
+                        <span className="font-mono text-xs text-gray-500 dark:text-gray-400">
                           on {action.page}
                         </span>
                       </div>
@@ -422,18 +422,18 @@ export default function JourneyViewer() {
               </div>
 
               {/* Raw JSON */}
-              <details className="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-                <summary className="cursor-pointer text-lg font-semibold text-gray-800 dark:text-gray-200">
+              <details className="rounded-lg border border-gray-200 p-3 sm:p-4 dark:border-gray-700">
+                <summary className="cursor-pointer text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-200">
                   Raw JSON Data
                 </summary>
-                <pre className="mt-4 overflow-auto rounded-md bg-gray-100 p-4 text-xs dark:bg-gray-800">
+                <pre className="mt-4 overflow-auto rounded-md bg-gray-100 p-3 sm:p-4 text-xs dark:bg-gray-800">
                   {JSON.stringify(journeyData, null, 2)}
                 </pre>
               </details>
             </div>
           ) : (
-            <div className="rounded-lg border border-gray-200 p-8 text-center dark:border-gray-700">
-              <p className="text-gray-600 dark:text-gray-400">
+            <div className="rounded-lg border border-gray-200 p-6 sm:p-8 text-center dark:border-gray-700">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                 No journey data available. Start navigating and interacting with
                 the app to see tracked data here.
               </p>

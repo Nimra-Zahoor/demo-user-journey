@@ -40,16 +40,16 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
       <Navigation />
-      <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="rounded-lg bg-white p-8 shadow-lg dark:bg-gray-900">
-          <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-white">
+      <main className="mx-auto max-w-4xl px-4 py-6 sm:py-8 md:py-12 sm:px-6 lg:px-8">
+        <div className="rounded-lg bg-white p-4 sm:p-6 md:p-8 shadow-lg dark:bg-gray-900">
+          <h1 className="mb-4 text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
             Contact Page
           </h1>
-          <p className="mb-8 text-lg text-gray-600 dark:text-gray-400">
+          <p className="mb-6 sm:mb-8 text-base sm:text-lg text-gray-600 dark:text-gray-400">
             Fill out the form below. Each field interaction is tracked.
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             <div>
               <label
                 htmlFor="name"
@@ -103,14 +103,14 @@ export default function Contact() {
 
             <button
               type="submit"
-              className="w-full rounded-md bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
+              className="w-full rounded-md bg-blue-600 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-white transition-colors hover:bg-blue-700"
             >
               Send Message
             </button>
           </form>
 
-          <div className="mt-8 rounded-md bg-yellow-50 p-4 dark:bg-yellow-900/20">
-            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+          <div className="mt-6 sm:mt-8 rounded-md bg-yellow-50 p-3 sm:p-4 dark:bg-yellow-900/20">
+            <p className="text-xs sm:text-sm text-yellow-800 dark:text-yellow-200">
               <strong>Note:</strong> Every field interaction and form submission is tracked. 
               Check the Journey Viewer to see all tracked actions.
             </p>
