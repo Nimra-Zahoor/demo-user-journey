@@ -71,11 +71,6 @@ export default function Home() {
                     Features Demo Page
                   </a> - See all package features in action
                 </li>
-                <li>
-                  <a href="/database" className="font-medium underline hover:text-blue-900 dark:hover:text-blue-200">
-                    Database Events Viewer
-                  </a> - View events stored in SQLite database
-                </li>
                 <li>Action tracking with metadata on all pages</li>
                 <li>Manual flush to backend functionality</li>
               </ul>
@@ -88,7 +83,6 @@ export default function Home() {
                 <li>Click the buttons above to track actions with metadata</li>
                 <li>Navigate to different pages using the navigation bar</li>
                 <li>Visit the "Features" page to see all package features</li>
-                <li>Visit the "Database" page to see events stored in SQLite</li>
                 <li>Visit the "View Journey" page to see all tracked data</li>
                 <li>Try refreshing the page - data should persist (persist=true)</li>
                 <li>Try opening a new tab - should start a new session</li>
