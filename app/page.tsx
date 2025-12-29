@@ -1,17 +1,17 @@
 "use client";
 
-import { useJourney } from "user-journey-analytics";
+// Client Component - demonstrates client-side usage with direct exports
+import { trackAction } from "user-journey-analytics";
 import Navigation from "./components/Navigation";
 
 export default function Home() {
-  const { trackAction } = useJourney();
-
   const handleButtonClick = (action: string, buttonType: string) => {
     trackAction(action, {
       buttonType,
       page: "/",
       timestamp: Date.now(),
-      userAgent: navigator.userAgent.substring(0, 50),
+      userAgent: typeof window !== "undefined" ? navigator.userAgent.substring(0, 50) : "",
+      componentType: "client"
     });
     alert(`Action tracked: ${action}`);
   };

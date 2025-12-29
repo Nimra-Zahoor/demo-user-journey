@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useJourney } from "user-journey-analytics";
+import { trackAction } from "user-journey-analytics";
 import Navigation from "../components/Navigation";
 
 export default function Contact() {
-  const { trackAction } = useJourney();
   const [formData, setFormData] = useState({
     name: "",
     email: "",

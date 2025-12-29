@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useJourney } from "user-journey-analytics";
+import { exportJourney, trackAction } from "user-journey-analytics";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 export default function ExportButton() {
-  const { exportJourney, trackAction } = useJourney();
   const [isOpen, setIsOpen] = useState(false);
 
   const formatTimestamp = (timestamp: number) => {

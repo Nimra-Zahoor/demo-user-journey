@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useJourney } from "user-journey-analytics";
+import { trackAction, exportJourney } from "user-journey-analytics";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 export default function Navigation() {
-  const { trackAction, exportJourney } = useJourney();
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

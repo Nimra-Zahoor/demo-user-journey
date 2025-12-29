@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useJourney } from "user-journey-analytics";
+import { exportJourney, clearJourney, trackAction, flush } from "user-journey-analytics";
 import Navigation from "../components/Navigation";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 export default function JourneyViewer() {
-  const { exportJourney, clearJourney, trackAction, flush } = useJourney();
   const [journeyData, setJourneyData] = useState<any>(null);
   const [flushStatus, setFlushStatus] = useState<string>("");
 

@@ -1,10 +1,9 @@
 "use client";
 
-import { useJourney } from "user-journey-analytics";
+import { trackAction } from "user-journey-analytics";
 import Navigation from "../components/Navigation";
 
 export default function Products() {
-  const { trackAction } = useJourney();
 
   const products = [
     { id: 1, name: "Product A", price: "$99" },

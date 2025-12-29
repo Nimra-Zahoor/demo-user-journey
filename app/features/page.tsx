@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useJourney } from "user-journey-analytics";
+import { trackAction, flush, exportJourney } from "user-journey-analytics";
 import Navigation from "../components/Navigation";
 
 export default function Features() {
-  const { trackAction, flush, exportJourney } = useJourney();
   const [flushStatus, setFlushStatus] = useState<string>("");
   const [formData, setFormData] = useState({
     productName: "",

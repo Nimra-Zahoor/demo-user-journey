@@ -1,15 +1,8 @@
-"use client";
-
-import { useJourney } from "user-journey-analytics";
+// Server Component - demonstrates server-side usage
 import Navigation from "../components/Navigation";
+import TrackButton from "../components/TrackButton";
 
 export default function About() {
-  const { trackAction } = useJourney();
-
-  const handleAction = (action: string) => {
-    trackAction(action);
-    alert(`Action tracked: ${action}`);
-  };
 
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
@@ -17,11 +10,16 @@ export default function About() {
       <main className="mx-auto max-w-4xl px-4 py-6 sm:py-8 md:py-12 sm:px-6 lg:px-8">
         <div className="rounded-lg bg-white p-4 sm:p-6 md:p-8 shadow-lg dark:bg-gray-900">
           <h1 className="mb-4 text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-            About Page
+            About Page (Server Component)
           </h1>
           <p className="mb-6 text-base sm:text-lg text-gray-600 dark:text-gray-400">
-            This is the About page. Page navigation is automatically tracked when you visit this page.
+            This page is a <strong>server component</strong> (no "use client" directive). It uses client button components that call <code className="bg-gray-100 px-1 py-0.5 rounded">trackAction</code> directly. Page navigation is automatically tracked when you visit this page.
           </p>
+          <div className="mb-4 rounded-md bg-blue-50 p-3 sm:p-4 dark:bg-blue-900/20">
+            <p className="text-xs sm:text-sm text-blue-800 dark:text-blue-200">
+              <strong>Note:</strong> Direct exports work in both server and client components. This demonstrates using them in a server component with client-side buttons.
+            </p>
+          </div>
 
           <div className="mb-6 sm:mb-8 space-y-4">
             <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
@@ -36,27 +34,30 @@ export default function About() {
 
           <div className="mb-6 sm:mb-8 space-y-4">
             <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200">
-              Test Actions on This Page
+              Test Actions (Client Buttons in Server Component)
             </h2>
             <div className="flex flex-wrap gap-3 sm:gap-4">
-              <button
-                onClick={() => handleAction("About: Read More Clicked")}
+              <TrackButton
+                action="About: Read More Clicked"
+                metadata={{ page: "/about", buttonType: "read-more" }}
                 className="rounded-md bg-indigo-600 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-white transition-colors hover:bg-indigo-700"
               >
                 Read More
-              </button>
-              <button
-                onClick={() => handleAction("About: Contact Team Clicked")}
+              </TrackButton>
+              <TrackButton
+                action="About: Contact Team Clicked"
+                metadata={{ page: "/about", buttonType: "contact-team" }}
                 className="rounded-md bg-pink-600 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-white transition-colors hover:bg-pink-700"
               >
                 Contact Team
-              </button>
-              <button
-                onClick={() => handleAction("About: View History Clicked")}
+              </TrackButton>
+              <TrackButton
+                action="About: View History Clicked"
+                metadata={{ page: "/about", buttonType: "view-history" }}
                 className="rounded-md bg-teal-600 px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base text-white transition-colors hover:bg-teal-700"
               >
                 View History
-              </button>
+              </TrackButton>
             </div>
           </div>
         </div>
